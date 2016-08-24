@@ -555,3 +555,148 @@ function add(firstName, lastName, email, phoneNumber) {
 add('vasya', 'vasyaa', 'y@com', 5664564);
 list();
 //////////////////////////////////////////////////////////////////////
+// loop to print out all the properties of nyc
+var nyc = {
+    fullName: "New York City",
+    mayor: "Bill de Blasio",
+    population: 8000000,
+    boroughs: 5
+};
+
+for (var i in nyc){
+    console.log(i)
+    }
+//////////////////////////////////////////////////////////////////////
+
+// the original Animal class and sayName method
+function Animal(name, numLegs) {
+    this.name = name;
+    this.numLegs = numLegs;
+}
+Animal.prototype.sayName = function() {
+    console.log("Hi my name is " + this.name);
+};
+
+// define a Penguin class
+function Penguin(name) {
+    this.name = name;
+    this.numLegs = 2;
+    }
+
+// set its prototype to be a new instance of Animal
+Penguin.prototype = new Animal();
+
+var penguin = new Penguin("qwerty");
+penguin.sayName();
+//////////////////////////////////////////////////////////////////////
+function Penguin(name) {
+    this.name = name;
+    this.numLegs = 2;
+}
+
+// create your Emperor class here and make it inherit from Penguin
+function Emperor(name) {
+    this.name = name;
+    }
+Emperor.prototype = new Penguin();
+// create an "emperor" object and print the number of legs it has
+var emperor = new Emperor("qwerty2");
+console.log(emperor.numLegs);
+//////////////////////////////////////////////////////////////////////
+
+//hasOwnProperty для проверки существования свойства
+// what is this "Object.prototype" anyway...?
+var prototypeType = typeof Object.prototype
+console.log(prototypeType);
+
+// now let's examine it!
+var hasOwn = Object.prototype.hasOwnProperty('hasOwnProperty')
+console.log(hasOwn);
+//////////////////////////////////////////////////////////////////////
+var cashRegister = {
+    total: 0,
+//insert the add method here
+    add: function(itemCost){
+        return this.total+= itemCost
+        },    
+    
+    scan: function (item) {
+        switch (item) { 
+        case "eggs": 
+            this.add(0.98); 
+            break;
+        
+        case "milk": 
+            this.add(1.23); 
+            break;
+        
+        //Add other 2 items here
+        case "magazine":
+            this.add(4.99);
+            break;
+        case "chocolate":
+            this.add(0.45);
+            break;
+        
+        }
+        return true;
+    }
+};
+
+//Scan 2 eggs and 3 magazines
+cashRegister.scan("eggs");
+cashRegister.scan("eggs");
+cashRegister.scan("magazine");
+cashRegister.scan("magazine");
+cashRegister.scan("magazine");
+//Show the total bill
+console.log('Your bill is '+cashRegister.total);
+//////////////////////////////////////////////////////////////////////
+function StaffMember(name,discountPercent){
+    this.name = name;
+    this.discountPercent = discountPercent;
+}
+
+var sally = new StaffMember("Sally",5);
+var bob = new StaffMember("Bob",10);
+
+// Create yourself again as 'me' with a staff discount of 20%
+var me = new StaffMember("Me",20);
+
+var cashRegister = {
+    total:0,
+    lastTransactionAmount: 0,
+    add: function(itemCost){
+        this.total += (itemCost || 0);
+        this.lastTransactionAmount = itemCost;
+    },
+    scan: function(item,quantity){
+        switch (item){
+        case "eggs": this.add(0.98 * quantity); break;
+        case "milk": this.add(1.23 * quantity); break;
+        case "magazine": this.add(4.99 * quantity); break;
+        case "chocolate": this.add(0.45 * quantity); break;
+        }
+        return true;
+    },
+    voidLastTransaction : function(){
+        this.total -= this.lastTransactionAmount;
+        this.lastTransactionAmount = 0;
+    },
+    // Create a new method applyStaffDiscount here
+    applyStaffDiscount : function(employee){
+        this.total -= this.total*(employee.discountPercent / 100)
+        }
+    
+};
+
+cashRegister.scan('eggs',1);
+cashRegister.scan('milk',1);
+cashRegister.scan('magazine',3);
+// Apply your staff discount by passing the 'me' object 
+// to applyStaffDiscount
+cashRegister.applyStaffDiscount(me);
+
+// Show the total bill
+console.log('Your bill is '+cashRegister.total.toFixed(2));
+//////////////////////////////////////////////////////////////////////
