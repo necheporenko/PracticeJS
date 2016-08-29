@@ -700,3 +700,177 @@ cashRegister.applyStaffDiscount(me);
 // Show the total bill
 console.log('Your bill is '+cashRegister.total.toFixed(2));
 //////////////////////////////////////////////////////////////////////
+function makeCounter() {
+  var currentCount = 1;
+
+  return { // возвратим объект вместо функции
+    getNext: function() {
+      return currentCount++;
+    },
+
+    set: function(value) {
+      currentCount = value;
+    },
+
+    reset: function() {
+      currentCount = 1;
+    }
+  };
+}
+
+var counter = makeCounter();
+
+alert( counter.getNext() ); // 1
+alert( counter.getNext() ); // 2
+
+counter.set(5);
+alert( counter.getNext() ); // 5
+//////////////////////////////////////////////////////////////////////
+function sum(a) {
+
+  return function(b) {
+    return a + b; // возьмет a из внешнего LexicalEnvironment
+  };
+
+}
+
+alert( sum(1)(2) );  //3
+alert( sum(5)(-1) ); //4
+//////////////////////////////////////////////////////////////////////
+function makeBuffer() {
+  var text = '';
+
+  return function(piece) {
+    if (arguments.length == 0) { // вызов без аргументов
+      return text;
+    }
+    text += piece;
+  };
+};
+
+var buffer = makeBuffer();
+
+// добавить значения к буферу
+buffer('Замыкания');
+buffer(' Использовать');
+buffer(' Нужно!');
+alert( buffer() ); // 'Замыкания Использовать Нужно!'
+
+var buffer2 = makeBuffer();
+buffer2(0);
+buffer2(1);
+buffer2(0);
+
+alert( buffer2() ); // '010'
+//////////////////////////////////////////////////////////////////////
+var users = [{
+  name: "Вася",
+  surname: 'Иванов',
+  age: 20
+}, {
+  name: "Петя",
+  surname: 'Чапаев',
+  age: 25
+}, {
+  name: "Маша",
+  surname: 'Медведева',
+  age: 18
+}];
+
+function byField(field) {
+    return function(a, b) {
+      return a[field] > b[field] ? 1 : -1;
+    }
+  }
+
+users.sort(byField('name'));
+users.forEach(function(user) {
+  alert( user.name );
+});
+
+users.sort(byField('age'));
+users.forEach(function(user) {
+  alert( user.name );
+});
+//////////////////////////////////////////////////////////////////////
+                    BIND
+function f(a, b) {
+  alert(this);
+  alert (a+b);
+}
+var g = f.bind('context21');
+g(1,2);
+//////////////////////////////////////////////////////////////////////
+                    THIS
+var ladder = {
+  step: 0,
+  up: function() { // вверх по лестнице
+    this.step++;
+  return this;
+  },
+  down: function() { // вниз по лестнице
+    this.step--;
+    return this;
+  },
+  showStep: function() { // вывести текущую ступеньку
+    alert( this.step );
+  }
+};
+ladder.up().up().down().up().down().showStep(); // 1
+//////////////////////////////////////////////////////////////////////
+function Calculator() {
+
+  this.read = function(){
+    this.a =  +prompt('a?', 0);
+    this.b =  +prompt('b?', 0);
+  }
+  this.sum = function() {
+    return this.a + this.b;
+  }
+  
+  this.mul = function() {
+    return this.a * this.b;
+  }
+  
+}
+
+var calculator = new Calculator();
+calculator.read();
+
+alert( "Сумма=" + calculator.sum() );
+alert( "Произведение=" + calculator.mul() );
+//////////////////////////////////////////////////////////////////////
+				GET, SET 
+function User(fullName) {
+  this.fullName = fullName;
+   
+  Object.defineProperty(this, 'firstName', {
+  get: function() {
+    var split = this.fullName.split(" ");
+    var firstName = split[0];
+    return firstName;
+  },
+  set: function(newfirstname){
+    this.fullName = newfirstname +' '+ this.lastName;
+}});
+  Object.defineProperty(this, 'lastName', {
+  get: function() {
+    var split = this.fullName.split(" ");
+    var lastName = split[1];
+    return lastName;   
+  },
+   set: function(newlastname){
+    this.fullName = this.firstName +' '+ newlastname;
+  }  
+    });  
+}
+var vasya = new User("Василий Попкин");
+console.log(User.firstname);
+// чтение firstName/lastName
+alert( vasya.firstName ); // Василий
+alert( vasya.lastName ); // Попкин
+// запись в lastName
+vasya.lastName = 'Сидоров';
+vasya.firstName = 'Петя';
+alert( vasya.fullName ); // Петя Сидоров
+//////////////////////////////////////////////////////////////////////
