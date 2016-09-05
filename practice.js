@@ -874,3 +874,109 @@ vasya.lastName = 'Сидоров';
 vasya.firstName = 'Петя';
 alert( vasya.fullName ); // Петя Сидоров
 //////////////////////////////////////////////////////////////////////
+							Call
+function sumArgs() {
+  /* ваш код */
+  arguments.reduce = [].reduce;
+  var suma = arguments.reduce(function(a,b){
+    return a + b;
+  }); 
+  return suma;
+}
+  OR
+function sumArgs() {
+  // запустим reduce из массива напрямую
+  return [].reduce.call(arguments, function(a, b) {
+    return a + b;
+  });
+}
+
+alert( sumArgs(4, 5, 6) ); // 15
+//////////////////////////////////////////////////////////////////////
+									Apply
+function sum() { // суммирует аргументы: sum(1,2,3) = 6
+  return [].reduce.call(arguments, function(a, b) {
+    return a + b;
+  });
+}
+
+function mul() { // перемножает аргументы: mul(2,3,4) = 24
+  return [].reduce.call(arguments, function(a, b) {
+    return a * b;
+  });
+}
+function applyAll(func){
+  return func.apply(this, [].slice.call(arguments, 1))  
+}
+
+alert( applyAll(sum, 1, 2, 3) ); // -> sum(1, 2, 3) = 6
+alert( applyAll(mul, 2, 3, 4) ); // -> mul(2, 3, 4) = 24
+//////////////////////////////////////////////////////////////////////
+function spread(func, args) {
+  return func.apply(null, args);
+}
+//////////////////////////////////////////////////////////////////////
+								Декоратор
+function checkPermissionDecorator(f) {
+  return function() {
+    if (isAdmin()) {
+      return f.apply(this, arguments);
+    }
+    alert( 'Недостаточно прав' );
+  }
+}
+//////////////////////////////////////////////////////////////////////
+								Декоратор
+function work(a) {
+  /*...*/ // work - произвольная функция, один аргумент
+}
+
+function makeLogging(f, log) {
+
+  function wrapper(a) {
+      log.push(a);
+      return f.call(this, a);
+    }
+
+  return wrapper;
+}
+
+var log = [];
+work = makeLogging(work, log);
+
+work(1); // 1
+work(5); // 5
+
+for (var i = 0; i < log.length; i++) {
+  alert( 'Лог:' + log[i] ); // "Лог:1", затем "Лог:5"
+}
+//////////////////////////////////////////////////////////////////////
+var leader = {
+  name: "Василий Иванович",
+  age: 35
+};
+
+var x = JSON.stringify(leader);
+console.log(x);
+
+console.log(JSON.parse(x));
+//////////////////////////////////////////////////////////////////////
+function User() {
+  var firstName, surname;
+  this.setFirstName = function(name1){
+    firstName = name1;
+  }
+  this.setSurname = function(name2){
+     surname = name2;
+  }
+  this.getFullName = function() {
+    return firstName + " " + surname;
+  }
+}
+
+var user = new User();
+user.setFirstName("Петя");
+user.setSurname("Иванов");
+
+alert( user.getFullName() ); // Петя Иванов
+//////////////////////////////////////////////////////////////////////
