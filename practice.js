@@ -296,7 +296,6 @@ console.log(multiplyNumeric(clone));
 При этом ноль 0 не должен заканчивать ввод, это разрешённое число.
 Выводит сумму всех значений массива
 
-
 var numbers = [];
 while (true) {
   var value = prompt("Введите число", 0);
@@ -326,10 +325,8 @@ function filterRange(arr, a, b) {
       result.push(arr[i]);                    // заполнение второго массива
     }
   }
-
   return result;
 }
-
 var arr = [5, 4, 3, 8, 0];
 
 var filtered = filterRange(arr, 3, 5);
@@ -979,4 +976,92 @@ user.setFirstName("Петя");
 user.setSurname("Иванов");
 
 alert( user.getFullName() ); // Петя Иванов
+//////////////////////////////////////////////////////////////////////
+function sum (a,b){
+  if(arguments[1] == undefined ){
+    return function(b){
+      return a + b;   }
+  } else{
+    return a + b;
+  }
+}
+console.log(sum(2,3));
+console.log(sum(3)(3));
+//////////////////////////////////////////////////////////////////////
+function echo(){
+  arguments.join = [].join; //скопировали сам метод
+  alert(arguments.join('-'))
+}
+echo(1,2,3,4,9);
+//////////////////////////////////////////////////////////////////////
+																						Реализация фабрики
+function Product() {
+  this.name = null;
+  this.price = null;
+}
+Product.Empty = function() {
+  var product = new Product();
+  product.name = 'empty';
+  product.price = 100;
+    return product;
+};
+Product.ForData = function(data) {
+  var product = new Product();
+  product.name = data.name;
+  product.price = data.price;
+    return product;
+};
+var tv = Product.Empty();
+var phone = Product.ForData({name:'iPhone', price:0});
+console.log(phone);
+console.log(tv);
+//////////////////////////////////////////////////////////////////////
+var Cart = function() {
+  var products = [];
+  this.getProduct = function(index){
+    return products[index];
+  }
+  this.addProduct = function(product){
+    if(!validateProduct(product)){
+      console.error("boom");
+    }
+        
+   var item = getProductByName(product.name);
+      if(item){
+      item.count++;
+      } else {
+       products.push({obj: product, count:1})
+      } 
+  };
+  function getProductByName(productName){
+    for (var i=0; i < products.length; i++){
+      if(products[i].obj.name == productName){
+        return products[i];
+      }
+    }  
+  }    
+    
+  function validateProduct(product){
+    return product.name != undefined && product.price != undefined;
+  }
+}
+
+function Product(){ 
+}
+
+Product.Empty = function(){
+  var product = new Product();
+  product.name = 'empty';
+  product.price = 100;
+    return product;
+}
+Product.ForData = function(data){
+  var product = new Product();
+  product.name = data.name;
+  product.price = data.price;
+    return product;
+}
+var cart = new Cart;
+cart.addProduct({name:'test'})
+cart.addProduct({name:'test'})
 //////////////////////////////////////////////////////////////////////
